@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const canvasShcema = new Schema(
+const canvasSchema = new Schema(
 	{
 		title: {
 			type: String,
@@ -33,5 +33,5 @@ const canvasShcema = new Schema(
 	{ timestamps: true },
 );
 
-const Canvas = model("Canvas", canvasShcema);
+const Canvas = model("Canvas", canvasSchema);
 export default Canvas;
