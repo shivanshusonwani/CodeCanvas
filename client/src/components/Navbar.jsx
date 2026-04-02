@@ -1,0 +1,46 @@
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+const Navbar = () => {
+	const { user, logout } = useAuth();
+
+	return (
+		<div className='fixed z-10 w-full pt-8 p-4 bg-white shadow-md'>
+			<div className='max-w-7xl mx-auto flex justify-between items-center'>
+				<Link
+					to='/'
+					className='font-semibold'>
+					CodeCanvas
+				</Link>
+
+				<div className='flex items-center gap-4'>
+					{user ? (
+						<>
+							<span>Hi, {user.name}</span>
+							<button
+								onClick={logout}
+								className='px-2 py-1 font-bold text-red-400 bg-red-100 rounded-lg cursor-pointer'>
+								Logout
+							</button>
+						</>
+					) : (
+						<>
+							<Link
+								to='/login'
+								className='font-semibold'>
+								Login
+							</Link>
+							<Link
+								to='/signup'
+								className='px-2 py-1 font-bold text-white bg-sky-400 rounded-lg cursor-pointer'>
+								Sign Up
+							</Link>
+						</>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export default Navbar;

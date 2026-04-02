@@ -1,25 +1,9 @@
-import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
 	return (
 		<div className='h-screen'>
-			<div className='fixed z-10 w-full pt-8 p-4 bg-white shadow-md'>
-				<div className='max-w-7xl mx-auto flex justify-between items-center'>
-					<p className='font-semibold'>CodeCanvas</p>
-					<div className='flex items-center gap-4'>
-						<Link
-							to='/login'
-							className='font-semibold'>
-							Login
-						</Link>
-						<Link
-							to='/signup'
-							className='px-2 py-1 font-bold text-white bg-sky-400 rounded-lg cursor-pointer'>
-							Sign Up
-						</Link>
-					</div>
-				</div>
-			</div>
+			<Navbar />
 
 			<section className='pb-16 pt-36 px-4 max-w-7xl mx-auto'>
 				<div className=''>

@@ -76,3 +76,26 @@ export const login = async (req, res) => {
 		user,
 	});
 };
+
+export const getMe = async (req, res) => {
+	const user = await User.findById(req.user.id).select("-password");
+
+	if (!user) {
+		return res.status(404).json({
+			message: "User not found",
+		});
+	}
+
+	return res.status(200).json({
+		message: "User profile fetched successfully",
+		user,
+	});
+};
+
+export const logOut = async (req, res) => {
+	res.clearCookie("access_token");
+
+	return res.status(200).json({
+		message: "Logged out successfully",
+	});
+};
