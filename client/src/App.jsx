@@ -1,8 +1,27 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
 function App() {
 	return (
-		<div className='h-screen flex justify-center items-center text-6xl font-bold text-sky-300 bg-neutral-800'>
-			<h1>CodeCanvas</h1>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path='/'
+					index
+					element={<Home />}
+				/>
+				<Route
+					path='/login'
+					element={<Login />}
+				/>
+				<Route
+					path='/signup'
+					element={<Signup />}
+				/>
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
