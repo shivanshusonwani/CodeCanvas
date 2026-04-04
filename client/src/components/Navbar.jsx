@@ -1,12 +1,20 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import API from "../api";
 
 const Navbar = () => {
 	const { user, logout } = useAuth();
 
+	const handleCreate = async () => {
+		const res = await API.post("/canvas", {
+			createdBy: user._id,
+		});
+		Navigate(`/canvas/${res.data._id}`);
+	};
+
 	return (
 		<div className='fixed z-10 w-full pt-8 p-4 bg-white shadow-md'>
-			<div className='max-w-7xl mx-auto flex justify-between items-center'>
+			<div className='flex justify-between items-center'>
 				<Link
 					to='/'
 					className='font-semibold'>
@@ -16,7 +24,7 @@ const Navbar = () => {
 				<div className='flex items-center gap-4'>
 					{user ? (
 						<>
-							<span>Hi, {user.name}</span>
+							<span className='border-r pr-3'>Hi, {user.name}</span>
 							<button
 								onClick={logout}
 								className='px-2 py-1 font-bold text-red-400 bg-red-100 rounded-lg cursor-pointer'>

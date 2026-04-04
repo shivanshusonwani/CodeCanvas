@@ -5,10 +5,11 @@ export const createCanvas = async (req, res) => {
 		createdBy: req.user.id,
 	});
 
-	await newCanvas.save();
+	const canvas = await newCanvas.save();
 
 	return res.status(201).json({
 		message: "Canvas created successfully",
+		canvas,
 	});
 };
 

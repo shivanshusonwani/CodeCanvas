@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthProvider } from "./context/AuthContext";
+import Canvas from "./pages/Canvas";
 
 function App() {
 	return (
@@ -21,6 +22,10 @@ function App() {
 					<Route
 						path='/signup'
 						element={<Signup />}
+					/>
+					<Route
+						path='/canvas/:id'
+						element={<Canvas />}
 					/>
 				</Routes>
 			</BrowserRouter>
