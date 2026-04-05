@@ -25,6 +25,10 @@ const canvasSchema = new Schema(
 			ref: "User",
 			required: true,
 		},
+		isPublic: {
+			type: Boolean,
+			default: true,
+		},
 		lastModified: {
 			type: Date,
 			default: Date.now,

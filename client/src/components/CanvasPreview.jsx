@@ -43,7 +43,7 @@ const Canvas = ({ html, css, js }) => {
 				srcDoc={srcDoc}
 				title='preview'
 				sandbox='allow-scripts'
-				className='w-full h-full'
+				className='absolute top-0 left-0 w-[200%] h-[200%] origin-top-left scale-[0.5] pointer-events-none'
 			/>
 			<div className='absolute inset-0 z-10 bg-transparent'></div>
 		</div>

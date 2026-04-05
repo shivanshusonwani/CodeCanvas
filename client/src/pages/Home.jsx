@@ -39,7 +39,7 @@ const Home = () => {
 		<div className='h-screen'>
 			<Navbar />
 
-			<section className='pb-16 pt-36 px-4 max-w-7xl mx-auto'>
+			<section className='pb-8 pt-24 px-4 max-w-7xl mx-auto'>
 				<div className=''>
 					<h1 className='text-6xl font-bold tracking-wide text-sky-400'>
 						CodeCanvas

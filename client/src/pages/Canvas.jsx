@@ -11,8 +11,10 @@ const Canvas = () => {
 		html: "",
 		css: "",
 		js: "",
+		// isPublic: true,
 	});
 	const [srcDoc, setSrcDoc] = useState("");
+	const [isPublic, setIsPublic] = useState(true);
 
 	const { user } = useAuth();
 
@@ -24,6 +26,8 @@ const Canvas = () => {
 			const res = await API.get(`/canvas/view/${id}`);
 			// console.log(id);
 			setCanvas(res.data);
+
+			// setIsPublic(res.data.isPublic);
 		};
 		if (id) {
 			fetchCanvas();
@@ -60,22 +64,46 @@ const Canvas = () => {
 			<Navbar />
 			<header className='pt-20 bg-sky-50 border-b border-sky-200'>
 				<div className='p-2 px-4 flex justify-between items-center'>
-					<div className='border rounded-md border-sky-400'>
-						{user && user._id === canvas.createdBy && (
-							<>
+					<div>
+						<div className='flex justify-center items-center gap-4'>
+							<div className='border rounded-md border-sky-400'>
+								{user && user._id === canvas.createdBy && (
+									<>
+										<button
+											onClick={handleSave}
+											className='bg-sky-400 font-bold text-white px-4 py-1 rounded-md'>
+											Save
+										</button>
+									</>
+								)}
+								<input
+									className='w-40 font-semibold px-2 py-1 outline-none'
+									type='text'
+									onChange={(e) =>
+										setCanvas({ ...canvas, title: e.target.value })
+									}
+									value={canvas.title}
+								/>
+							</div>
+							<div className='flex gap-2 items-center justify-center'>
 								<button
-									onClick={handleSave}
-									className='bg-sky-400 font-bold text-white px-4 py-1 rounded-md'>
-									Save
+									onClick={() =>
+										setCanvas({ ...canvas, isPublic: !canvas.isPublic })
+									}
+									className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
+										canvas.isPublic ? "bg-green-400" : "bg-neutral-400"
+									}`}>
+									<div
+										className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${
+											canvas.isPublic ? "translate-x-7" : "translate-x-0"
+										}`}
+									/>
 								</button>
-							</>
-						)}
-						<input
-							className='w-40 font-semibold px-2 py-1 outline-none'
-							type='text'
-							onChange={(e) => setCanvas({ ...canvas, title: e.target.value })}
-							value={canvas.title}
-						/>
+								<div className='font-semibold'>
+									{canvas.isPublic ? "Public" : "Private"}
+								</div>
+							</div>
+						</div>
 					</div>
 					<div className=''>
 						{user && user._id === canvas.createdBy && (
