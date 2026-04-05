@@ -7,8 +7,8 @@ import Canvas from "./pages/Canvas";
 
 function App() {
 	return (
-		<AuthProvider>
-			<BrowserRouter>
+		<BrowserRouter>
+			<AuthProvider>
 				<Routes>
 					<Route
 						path='/'
@@ -28,8 +28,8 @@ function App() {
 						element={<Canvas />}
 					/>
 				</Routes>
-			</BrowserRouter>
-		</AuthProvider>
+			</AuthProvider>
+		</BrowserRouter>
 	);
 }
 

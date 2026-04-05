@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../api.js";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
@@ -40,6 +42,7 @@ export const AuthProvider = ({ children }) => {
 	const logout = async () => {
 		await API.post("/auth/logout");
 		setUser(null);
+		navigate("/");
 	};
 
 	return (

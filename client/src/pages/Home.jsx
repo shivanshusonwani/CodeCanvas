@@ -7,18 +7,25 @@ import CanvasPreview from "../components/CanvasPreview";
 
 const Home = () => {
 	const [canvases, setCanvases] = useState([]);
-
+	const [view, setView] = useState("trending");
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
 	useEffect(() => {
+		if (!user && view === "my-canvases") {
+			setView("trending");
+			return;
+		}
 		const fetchCanvas = async () => {
-			const res = await API.get("/canvas");
+			const endpoint = view === "trending" ? "/canvas" : `/canvas/${user._id}`;
+			const res = await API.get(endpoint);
 			setCanvases(res.data);
 		};
 
-		fetchCanvas();
-	}, []);
+		if (view === "trending" || (user && view === "my-canvases")) {
+			fetchCanvas();
+		}
+	}, [view, user]);
 
 	const handleCreate = async () => {
 		const res = await API.post("/canvas", {
@@ -54,19 +61,43 @@ const Home = () => {
 				</div>
 			</section>
 
-			<div className='max-w-7xl mx-auto px-4'>
-				<main className='grid grid-cols-3 gap-8'>
-					{canvases.map((canvas) => (
-						<CanvasPreview
-							key={canvas._id}
-							id={canvas._id}
-							title={canvas.title}
-							createdBy={canvas.createdBy.name}
-							lastModified={canvas.lastModified}
-						/>
-					))}
-				</main>
-			</div>
+			<section className='max-w-7xl mx-auto p-4'>
+				<div className='flex gap-8 border-b border-sky-400 mb-8'>
+					<button
+						onClick={() => setView("trending")}
+						className={`relative px-2 pb-2 text-lg font-semibold transition-all ${view === "trending" ? "text-sky-400" : "text-neutral-500 hover:text-neutral-400 cursor-pointer"}`}>
+						Trending
+						{view === "trending" && (
+							<span className='absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-sky-400'></span>
+						)}
+					</button>
+
+					{user && (
+						<button
+							onClick={() => setView("my-canvases")}
+							className={`relative pb-2 text-lg font-semibold transition-all ${
+								view === "my-canvases"
+									? "text-sky-400"
+									: "text-neutral-500 hover:text-neutral-400 cursor-pointer"
+							}`}>
+							My Creations
+							{view === "my-canvases" && (
+								<span className='absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-sky-400'></span>
+							)}
+						</button>
+					)}
+				</div>
+				<div className='max-w-7xl mx-auto py-4 rounded-2xl'>
+					<main className='grid grid-cols sm:grid-cols-2 lg:grid-cols-3 gap-12'>
+						{canvases.map((canvas) => (
+							<CanvasPreview
+								key={canvas._id}
+								canvas={canvas}
+							/>
+						))}
+					</main>
+				</div>
+			</section>
 		</div>
 	);
 };

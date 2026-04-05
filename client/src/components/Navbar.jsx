@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import API from "../api";
 
 const Navbar = () => {
 	const { user, logout } = useAuth();
-
-	const handleCreate = async () => {
-		const res = await API.post("/canvas", {
-			createdBy: user._id,
-		});
-		Navigate(`/canvas/${res.data._id}`);
-	};
 
 	return (
 		<div className='fixed z-10 w-full pt-8 p-4 bg-white shadow-md'>
