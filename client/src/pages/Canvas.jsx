@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import API from "../api";
 import Navbar from "../components/Navbar";
+import MonacoEditor from "../components/MonacoEditor";
 
 const Canvas = () => {
 	const [canvas, setCanvas] = useState({
@@ -57,7 +58,7 @@ const Canvas = () => {
 	return (
 		<div className='flex flex-col h-screen overflow-hidden'>
 			<Navbar />
-			<header className='pt-20 bg-sky-50 border-b'>
+			<header className='pt-20 bg-sky-50 border-b border-sky-200'>
 				<div className='p-2 px-4 flex justify-between items-center'>
 					<div className='border rounded-md border-sky-400'>
 						{user && user._id === canvas.createdBy && (
@@ -81,7 +82,7 @@ const Canvas = () => {
 							<>
 								<button
 									onClick={() => handleDelete(id)}
-									className='bg-red-400 font-bold text-white px-4 py-1 rounded-md'>
+									className='bg-red-500 font-bold text-white px-4 py-1 rounded-md'>
 									Delete
 								</button>
 							</>
@@ -91,28 +92,31 @@ const Canvas = () => {
 			</header>
 
 			<div className='flex h-screen w-full overflow-hidden'>
-				<div className='flex flex-col w-1/3 bg-neutral-900 border-r border-neutral-700'>
-					<textarea
-						placeholder='HTML'
-						className='border-b border-neutral-600 grow text-white p-2 outline-none font-mono text-sm'
-						onChange={(e) => setCanvas({ ...canvas, html: e.target.value })}
+				<div className='flex flex-col w-1/4 min-w-80 bg-neutral-900 border-r border-neutral-700'>
+					<MonacoEditor
+						className='text-white p-2 outline-none font-mono text-sm'
+						label='HTML'
+						language='html'
+						onChange={(val) => setCanvas({ ...canvas, html: val })}
 						value={canvas.html || ""}
 					/>
-					<textarea
-						placeholder='CSS'
-						className='border-b border-neutral-600 grow text-white p-2 outline-none font-mono text-sm'
-						onChange={(e) => setCanvas({ ...canvas, css: e.target.value })}
+					<MonacoEditor
+						className='text-white p-2 outline-none font-mono text-sm'
+						label='CSS'
+						language='css'
+						onChange={(val) => setCanvas({ ...canvas, css: val })}
 						value={canvas.css || ""}
 					/>
-					<textarea
-						placeholder='JS'
-						className='grow text-white p-2 outline-none font-mono text-sm'
-						onChange={(e) => setCanvas({ ...canvas, js: e.target.value })}
+					<MonacoEditor
+						className='text-white p-2 outline-none font-mono text-sm'
+						label='JS'
+						language='js'
+						onChange={(val) => setCanvas({ ...canvas, js: val })}
 						value={canvas.js || ""}
 					/>
 				</div>
 
-				<div className='flex-1 bg-white'>
+				<div className='flex-1 w-3/4 bg-white'>
 					<iframe
 						className='w-full h-full border-none'
 						srcDoc={srcDoc}
