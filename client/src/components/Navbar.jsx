@@ -10,7 +10,10 @@ const Navbar = () => {
 				<Link
 					to='/'
 					className='font-semibold'>
-					CodeCanvas
+					<div className='flex items-baseline gap-1'>
+						<span className='text-sky-400 text-2xl font-mono'>[C]</span>
+						<p>CodeCanvas</p>
+					</div>
 				</Link>
 
 				<div className='flex items-center gap-4'>

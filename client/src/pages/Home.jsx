@@ -8,6 +8,9 @@ import CanvasPreview from "../components/CanvasPreview";
 const Home = () => {
 	const [canvases, setCanvases] = useState([]);
 	const [view, setView] = useState("trending");
+
+	const [isFetching, setIsFetching] = useState(false);
+
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
@@ -17,9 +20,17 @@ const Home = () => {
 			return;
 		}
 		const fetchCanvas = async () => {
-			const endpoint = view === "trending" ? "/canvas" : `/canvas/${user._id}`;
-			const res = await API.get(endpoint);
-			setCanvases(res.data);
+			setIsFetching(true);
+			try {
+				const endpoint =
+					view === "trending" ? "/canvas" : `/canvas/${user._id}`;
+				const res = await API.get(endpoint);
+				setCanvases(res.data);
+			} catch (error) {
+				console.error(error.response?.data?.message || "Error loading data");
+			} finally {
+				setIsFetching(false);
+			}
 		};
 
 		if (view === "trending" || (user && view === "my-canvases")) {
@@ -28,11 +39,15 @@ const Home = () => {
 	}, [view, user]);
 
 	const handleCreate = async () => {
-		const res = await API.post("/canvas", {
-			createdBy: user._id,
-		});
+		try {
+			const res = await API.post("/canvas", {
+				createdBy: user._id,
+			});
 
-		navigate(`/canvas/${res.data.canvas._id}`);
+			navigate(`/canvas/${res.data.canvas._id}`);
+		} catch (error) {
+			console.error("Something went wrong");
+		}
 	};
 
 	return (
@@ -50,7 +65,7 @@ const Home = () => {
 					{user ? (
 						<button
 							onClick={handleCreate}
-							className='mt-3 px-4 py-1 text-xl font-bold bg-sky-400 text-white rounded-lg'>
+							className='mt-3 px-4 py-1 text-xl font-bold bg-sky-400 text-white rounded-lg cursor-pointer'>
 							Create Canvas
 						</button>
 					) : (
@@ -65,7 +80,7 @@ const Home = () => {
 				<div className='flex gap-8 border-b border-sky-400 mb-8'>
 					<button
 						onClick={() => setView("trending")}
-						className={`relative px-2 pb-2 text-lg font-semibold transition-all ${view === "trending" ? "text-sky-400" : "text-neutral-500 hover:text-neutral-400 cursor-pointer"}`}>
+						className={`relative px-2 pb-2 text-lg font-semibold transition-all ${view === "trending" ? "text-sky-400" : "text-neutral-400 hover:text-neutral-400/80 cursor-pointer"}`}>
 						Trending
 						{view === "trending" && (
 							<span className='absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-sky-400'></span>
@@ -78,7 +93,7 @@ const Home = () => {
 							className={`relative pb-2 text-lg font-semibold transition-all ${
 								view === "my-canvases"
 									? "text-sky-400"
-									: "text-neutral-500 hover:text-neutral-400 cursor-pointer"
+									: "text-neutral-400 hover:text-neutral-400/80 cursor-pointer"
 							}`}>
 							My Creations
 							{view === "my-canvases" && (
@@ -88,14 +103,21 @@ const Home = () => {
 					)}
 				</div>
 				<div className='max-w-7xl mx-auto py-4 rounded-2xl'>
-					<main className='grid grid-cols sm:grid-cols-2 lg:grid-cols-3 gap-12'>
-						{canvases.map((canvas) => (
-							<CanvasPreview
-								key={canvas._id}
-								canvas={canvas}
-							/>
-						))}
-					</main>
+					{isFetching ? (
+						<div className='flex flex-col gap-12 justify-center items-center py-20'>
+							<div className='animate-spin h-8 w-8 border-4 border-sky-400 border-t-transparent rounded-full'></div>
+							<p>Syncing canvases...</p>
+						</div>
+					) : (
+						<main className='grid grid-cols sm:grid-cols-2 lg:grid-cols-3 gap-12'>
+							{canvases.map((canvas) => (
+								<CanvasPreview
+									key={canvas._id}
+									canvas={canvas}
+								/>
+							))}
+						</main>
+					)}
 				</div>
 			</section>
 		</div>

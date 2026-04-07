@@ -14,7 +14,7 @@ const Canvas = () => {
 		// isPublic: true,
 	});
 	const [srcDoc, setSrcDoc] = useState("");
-	const [isPublic, setIsPublic] = useState(true);
+	const [isSaving, setIsSaving] = useState(false);
 
 	const { user } = useAuth();
 
@@ -48,8 +48,16 @@ const Canvas = () => {
 	}, [canvas.html, canvas.css, canvas.js]);
 
 	const handleSave = async () => {
-		await API.put(`/canvas/${id}`, canvas);
-		alert("Canvas saved successfully.");
+		setIsSaving(true);
+		try {
+			await API.put(`/canvas/${id}`, canvas);
+			alert("Canvas saved successfully.");
+		} catch (error) {
+			console.error("Something went wrong:", error);
+			alert("Failed to save canvas.");
+		} finally {
+			setIsSaving(false);
+		}
 	};
 
 	const handleDelete = async (canvasId) => {
@@ -72,7 +80,7 @@ const Canvas = () => {
 										<button
 											onClick={handleSave}
 											className='bg-sky-400 font-bold text-white px-4 py-1 rounded-md'>
-											Save
+											{isSaving ? "Saving..." : "Save"}
 										</button>
 									</>
 								)}
